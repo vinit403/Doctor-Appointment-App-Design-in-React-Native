@@ -17,6 +17,12 @@ const BookApointment = () => {
             <Text style={style.name}>Doctor Jack</Text>
             <Text style={style.spl}>Skin Specialist</Text>
 
+            <Text style={style.heading}>Select Date</Text>
+
+            <View>
+                <FlatList> </FlatList>
+            </View>
+
             <Text style={style.heading}>Available Slots</Text>
 
             <View>
