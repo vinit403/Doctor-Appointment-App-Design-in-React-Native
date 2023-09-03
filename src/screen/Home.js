@@ -14,62 +14,83 @@ import CommonBtn from '../components/CommonBtn';
 
 const Home = ({navigation}) => {
   return (
-    <ScrollView style={style.container}>
-      <View style={style.container}>
+   
+    <View style={style.container}>
+      <ScrollView style={style.container}>
+        <View style={style.container}>
 
-        <Header title={'Doctor App'} icon={require('../images/back.png')} />
+          <Header title={'Doctor App'} icon={require('../images/back.png')} />
 
-        <Image source={require('../images/banner.jpg')} style={style.banner} />
+          <Image source={require('../images/banner.jpg')} style={style.banner} />
 
-        <Text style={style.heading}>Select Category</Text>
+          <Text style={style.heading}>Select Category</Text>
 
-        <View style={{marginTop: 20}}>
-          <FlatList
-            data={[1, 1, 1, 1, 1]}
-            horizontal
-            showsHorizontalScrollIndicator
-            renderItem={({item, index}) => {
-              return (
-                <TouchableOpacity>
-                  <LinearGradient
-                    colors={['#009FF3', '#2A2A72']}
-                    style={style.linearGradient}>
-                    <Text style={style.catName}>{'Category' + index + 1}</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              );
-            }}
-          />
+          <View style={{marginTop: 20}}>
+            <FlatList
+              data={[1, 1, 1, 1, 1]}
+              horizontal
+              showsHorizontalScrollIndicator
+              renderItem={({item, index}) => {
+                return (
+                  <TouchableOpacity>
+                    <LinearGradient
+                      colors={['#009FF3', '#2A2A72']}
+                      style={style.linearGradient}>
+                      <Text style={style.catName}>{'Category' + index + 1}</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
+
+          <Text style={style.heading}>Top Rated Doctors</Text>
+
+          <View style={{marginTop: 20, alignItems: 'center'}}>
+            <FlatList
+              numColumns={2}
+              data={[1, 1, 1, 11,1,1]}
+              renderItem={({item, index}) => {
+                return <View style={style.docItem}>
+                    <Image source={require("../images/doctor.png")} style={style.docImg}/>
+                    <Text style={style.docName}>Doctor {index+1}</Text>
+                    <Text style={style.docSpl}>Skin Specialist</Text>
+
+                    {/* check condition if doctor is available or not */}
+                    <Text style={[style.status ,{color:index/2==0?'green':'red', opacity:index/2==0?1:0.5}] }>{index/2==0?'Available':"Busy"}</Text>  
+
+                    {/* if available then show book button otherwise not display the book button */}
+                    <CommonBtn w={150} h={40} status={index/2==0?true:false} txt={"Book Appointment"} onClick={()=>{
+                        if(index/2==0){
+                            navigation.navigate("BookApointment")
+                        }
+                    }}/>
+                    
+                </View>;
+              }}
+            />
+          </View>
         </View>
+      </ScrollView>
 
-        <Text style={style.heading}>Top Rated Doctors</Text>
+      
+      <View style={style.bottomView}>
 
-        <View style={{marginTop: 20, alignItems: 'center'}}>
-          <FlatList
-            numColumns={2}
-            data={[1, 1, 1, 11,1,1]}
-            renderItem={({item, index}) => {
-              return <View style={style.docItem}>
-                  <Image source={require("../images/doctor.png")} style={style.docImg}/>
-                  <Text style={style.docName}>Doctor {index+1}</Text>
-                  <Text style={style.docSpl}>Skin Specialist</Text>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Completed')}}>
+            <Image source={require('../images/completed.png')} style={style.bottomIcon} />
+          </TouchableOpacity>
 
-                  {/* check condition if doctor is available or not */}
-                  <Text style={[style.status ,{color:index/2==0?'green':'red', opacity:index/2==0?1:0.5}] }>{index/2==0?'Available':"Busy"}</Text>  
+          <TouchableOpacity onPress={()=>{navigation.navigate('Pending')}}>
+            <Image source={require('../images/pending.png')} style={style.bottomIcon} />
+          </TouchableOpacity>
 
-                  {/* if available then show book button otherwise not display the book button */}
-                  <CommonBtn w={150} h={40} status={index/2==0?true:false} txt={"Book Appointment"} onClick={()=>{
-                      if(index/2==0){
-                          navigation.navigate("BookApointment")
-                      }
-                  }}/>
-                  
-              </View>;
-            }}
-          />
-        </View>
+          <TouchableOpacity onPress={()=>{navigation.navigate('CallAmb')}}>
+            <Image source={require('../images/ambulance.png')} style={style.bottomIcon} />
+          </TouchableOpacity>
+
       </View>
-    </ScrollView>
+
+    </View>
   );
 };
 
@@ -143,5 +164,22 @@ const style = StyleSheet.create({
     fontWeight:"600",
     alignSelf:'center',
     marginTop:5,
+  },
+  bottomView:{
+    width:'90%',
+    height:60,
+    borderRadius:10,
+    elevation:5,
+    position:'absolute',
+    bottom:20,
+    backgroundColor:'#fff',
+    alignSelf:'center',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-evenly'
+  },
+  bottomIcon:{
+    width:30,
+    height:30,
   }
 });

@@ -1,14 +1,15 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState , useEffect } from 'react'
 import Header from '../components/Header'
 import CommonBtn from '../components/CommonBtn';
 
 let Dayslist = [];
 
-const BookApointment = () => {
+const BookApointment = ({navigation}) => {
 
-    const  [selectedSlot , setSelectedSlot] = useState(0);
+    const  [selectedSlot , setSelectedSlot] = useState(-1);
     const  [selectedGender , setSelectedGender] = useState(0);
+    const  [selectedDay , setSelectedDay] = useState(-1);
     const  [slots , setSolts] = useState([
         {sloT: "10:00-12:00PM" , selected:false},
         {sloT: "12:00-02:00PM" , selected:false},
@@ -18,10 +19,14 @@ const BookApointment = () => {
         {sloT: "08:00-11:00PM" , selected:false},
     ]);
 
+    const [days , setDays] = useState([]);
+
     useEffect(() => {
+        Dayslist= [];
         for (let i=1; i<=getDays(new Date().getMonth()+1); i++){
             Dayslist.push({day : i, selected: false});
         }
+        setDays(Dayslist); 
     }, [])
 
     const getDays = (month)=>{
@@ -70,11 +75,32 @@ const BookApointment = () => {
             <View style={{marginTop:20}}>
                 <FlatList 
                     horizontal
-                    data={Dayslist}
+                    showsHorizontalScrollIndicator={false}
+                    data={days}
+                    keyExtractor={({item,index})=>index}
                     renderItem={({item,index}) =>{
                         return(
-                            <TouchableOpacity style={{width:60,height:70,borderRadius:20,justifyContent: 'center',alignItems:'center',backgroundColor:"blue",marginLeft:10,}}>
-                                <Text style={{color:"#fff"}}>{item}</Text>
+                            <TouchableOpacity 
+                              style={{
+                                width:60,
+                                height:70,
+                                borderRadius:20,
+                                justifyContent: 'center',
+                                alignItems:'center',
+                                backgroundColor:selectedDay==index? "blue" : "white",
+                                borderWidth:selectedDay==index? 0:1,
+                                marginLeft:10,
+                              }} onPress={()=>{
+
+                                if(item.day<new Date().getDate()) {
+
+                                }else{
+                                  setSelectedDay(index)}
+                                }
+                                
+                                }>
+                                  
+                                <Text style={{color:selectedDay==index?"#fff":"blue"}}>{item.day }</Text>
                             </TouchableOpacity>
                         )
                     }}
@@ -124,7 +150,7 @@ const BookApointment = () => {
             </View>
 
             <View style={style.btnView}>
-                <CommonBtn w={300} h={45} txt={"Book Now"} status={true} />
+                <CommonBtn w={300} h={45} txt={"Book Now"} status={true} onClick={()=>{navigation.navigate('Success')}}/>
             </View>
         </View>
 
@@ -203,4 +229,4 @@ const style = StyleSheet.create({
         marginTop:20,
         marginBottom:20
     },
-})
+})  
