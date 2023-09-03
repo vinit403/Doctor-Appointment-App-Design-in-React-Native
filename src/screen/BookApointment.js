@@ -1,13 +1,61 @@
 import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState , useEffect } from 'react'
 import Header from '../components/Header'
 import CommonBtn from '../components/CommonBtn';
+
+let Dayslist = [];
 
 const BookApointment = () => {
 
     const  [selectedSlot , setSelectedSlot] = useState(0);
     const  [selectedGender , setSelectedGender] = useState(0);
+    const  [slots , setSolts] = useState([
+        {sloT: "10:00-12:00PM" , selected:false},
+        {sloT: "12:00-02:00PM" , selected:false},
+        {sloT: "02:00-04:00PM" , selected:false},
+        {sloT: "04:00-06:00PM" , selected:false},
+        {sloT: "06:00-08:00PM" , selected:false},
+        {sloT: "08:00-11:00PM" , selected:false},
+    ]);
 
+    useEffect(() => {
+        for (let i=1; i<=getDays(new Date().getMonth()+1); i++){
+            Dayslist.push({day : i, selected: false});
+        }
+    }, [])
+
+    const getDays = (month)=>{
+        let days = 0;
+
+       
+
+        if (month == 1) {
+          days = 31;
+        } else if (month == 2) {
+          days = 28;
+        } else if (month == 3) {
+          days = 31;
+        } else if (month == 4) {
+          days = 30;
+        } else if (month == 5) {
+          days = 31;
+        } else if (month == 6) {
+          days = 30;
+        } else if (month == 7) {
+          days = 31;
+        } else if (month == 8) {
+          days = 31;
+        } else if (month == 9) {
+          days = 30;
+        } else if (month == 10) {
+          days = 31;
+        } else if (month == 11) {
+          days = 30;
+        } else if (month == 12) {
+          days = 31;
+        }
+      return days;
+    }
   return (
     <ScrollView style={style.container}>
         <View style={style.container}>
@@ -19,24 +67,46 @@ const BookApointment = () => {
 
             <Text style={style.heading}>Select Date</Text>
 
-            <View>
-                <FlatList> </FlatList>
+            <View style={{marginTop:20}}>
+                <FlatList 
+                    horizontal
+                    data={Dayslist}
+                    renderItem={({item,index}) =>{
+                        return(
+                            <TouchableOpacity style={{width:60,height:70,borderRadius:20,justifyContent: 'center',alignItems:'center',backgroundColor:"blue",marginLeft:10,}}>
+                                <Text style={{color:"#fff"}}>{item}</Text>
+                            </TouchableOpacity>
+                        )
+                    }}
+
+                />
             </View>
 
             <Text style={style.heading}>Available Slots</Text>
 
             <View>
-                <FlatList 
-                    numColumns={2}
-                    data={["10:00-12:00PM" , "12:00-02:00PM" , "02:00-04:00PM" , "04:00-06:00PM" , "06:00-08:00PM" , "08:00-11:00PM"]}
-                    renderItem={({item,index}) =>{
-                        return(
-                            <TouchableOpacity style={[style.timeSlots , {borderColor:selectedSlot==index?"blue":"black"}]} onPress={()=>{setSelectedSlot(index); }}>
-                                <Text style={{color : selectedSlot==index?"blue":"black"}}>{item}</Text>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
+            <FlatList
+            numColumns={2}
+            data={slots}
+            keyExtractor={({item, index}) => index}
+            renderItem={({item, index}) => {
+              return (
+                <TouchableOpacity
+                  style={[
+                    style.timeSlots,
+                    {borderColor: index == selectedSlot ? 'blue' : 'black'},
+                  ]}
+                  onPress={() => {
+                    setSelectedSlot(index);
+                  }}>
+                  <Text
+                    style={{color: index == selectedSlot ? 'blue' : 'black'}}>
+                    {item.sloT}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
             </View>
 
             <Text style={style.heading}>Patient Name</Text>
